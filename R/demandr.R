@@ -17,15 +17,6 @@ hello <- function() {
   print("Hello, world!")
 }
 
-
-hour.energy <- dr.data.raw%>%
-  mutate(Date.Time = mdy_hms(Date.Time))%>%
-  group_by(minute.origin = (origin%--%Date.Time)%/%minutes(1))%>% #create grouping by minute (replaces spreading)
-  summarise(energy = sum(Load, na.rm = TRUE))%>%
-  ungroup()%>%
-  mutate(Date.Time = origin + minutes(minute.origin))%>%
-  select(Date.Time, energy)
-
 #Function that returns a time line in the form of list of dr event milestones 
 event.timeline <- function(call, end, len.base = 2){
   milestones = c(event = mdy_hm(call) %--% mdy_hm(end),
