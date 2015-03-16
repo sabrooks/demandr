@@ -1,9 +1,9 @@
 Package: demandr
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.1
+Version: 0.100
 Date: 2015-03-15
-Author: Who wrote it
+Author: Steve Brooks
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?

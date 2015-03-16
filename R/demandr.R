@@ -1,6 +1,6 @@
 # Hello, world!
 #
-# This is an example function named 'hello' 
+# This is an example function named 'hello'
 # which prints 'Hello, world!'.
 #
 # You can learn more about package authoring with RStudio at:
@@ -17,11 +17,12 @@ hello <- function() {
   print("Hello, world!")
 }
 
-#Function that returns a time line in the form of list of dr event milestones 
+#Function that returns a time line in the form of list of dr event milestones
 event.timeline <- function(call, end, len.base = 2){
-  milestones = c(event = mdy_hm(call) %--% mdy_hm(end),
-                 measure.period = (int_start(call)+minutes(10)) %--% int_end(event),
-                 baseline.period = (int_start(event) - hours(len.base)) %--% int_start(event))
+
+  milestones = as.list(event = call %--% end,
+                 measure.period = (call+minutes(10)) %--% end,
+                 baseline.period = (call - hours(len.base)) %--% call)
   return(milestones)
 }
 
@@ -64,3 +65,11 @@ plot.event <- function(df, milestones, baseline, response){
                      yend = response))
 }
 
+example.event <- function (){
+  times <- event.timeline ( mdy_hm("2/2/15 13:00") , mdy_hm("2/2/15 14:40"))
+  base <- demandr::baseline(EventData, times[['baseline.period']])
+  response <- demandr::event.max(EventData, time$measure.period)
+
+
+
+}
