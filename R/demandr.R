@@ -20,7 +20,7 @@ hello <- function() {
 #Function that returns a time line in the form of list of dr event milestones
 event.timeline <- function(call, end, len.base = 2){
 
-  milestones = as.list(event = call %--% end,
+  milestones = list(event = call %--% end,
                  measure.period = (call+minutes(10)) %--% end,
                  baseline.period = (call - hours(len.base)) %--% call)
   return(milestones)
@@ -49,27 +49,30 @@ baseline <- function(df, baseline.interval){
 #baseline and response are the values of the baseline (min) and response (max)
 
 plot.event <- function(df, milestones, baseline, response){
+
+  baseline.start <- int_start(milestones$baseline.period)
+  baseline.end <- int_end(milestones$baseline.period)
+
   df%>%
     ggplot(aes(x = Date.Time, y = energy))+
-    geom_line()+
-    annotate("rect", xmin = int_start(milestone$event), xmax = int_end(milestone$event),
+  geom_line()+
+  annotate("rect", xmin = int_start(milestones$event), xmax = int_end(milestones$event),
              ymin = min(df$energy), ymax = max(df$energy),
-             alpha = .1, fill = "blue")+
-    geom_segment(aes(x = int_start(milestones$baseline.period),
-                     xend = int_end(milestones$baseline.period),
-                     y = baseline,
-                     yend = baseline))+
-    geom_segment(aes(x = int_start(milestones$measure.period),
-                     xend = int_end(milestones$measure.period),
-                     y = response,
-                     yend = response))
+             alpha = .1, fill = "blue")
+    #geom_segment(aes(x = mdy_hm(paste(baseline.start)),
+    #                xend = baseline.end,
+    #                 y = baseline,
+    #                 yend = baseline))
+    #geom_segment(aes(x = int_start(milestones$measure.period),
+    #                 xend = int_end(milestones$measure.period),
+    #                 y = response,
+    #                 yend = response))
 }
 
 example.event <- function (){
   times <- event.timeline ( mdy_hm("2/2/15 13:00") , mdy_hm("2/2/15 14:40"))
-  base <- demandr::baseline(EventData, times[['baseline.period']])
-  response <- demandr::event.max(EventData, time$measure.period)
+  base <- demandr::baseline(EventData, times$baseline.period)
+  response <- demandr::event.max(EventData, times$measure.period)
 
-
-
+  demandr::plot.event(EventData, times, base, response)
 }
