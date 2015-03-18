@@ -54,11 +54,12 @@ plot.event <- function(df, milestones, baseline, response){
   baseline.end <- int_end(milestones$baseline.period)
 
   df%>%
-    ggplot(aes(x = Date.Time, y = energy))+
-  geom_line()+
-  annotate("rect", xmin = int_start(milestones$event), xmax = int_end(milestones$event),
-             ymin = min(df$energy), ymax = max(df$energy),
-             alpha = .1, fill = "blue")
+    ggvis(~Date.Time, ~ energy)%>%
+    layer_lines()
+  #geom_line()+
+  #annotate("rect", xmin = int_start(milestones$event), xmax = int_end(milestones$event),
+  #           ymin = min(df$energy), ymax = max(df$energy),
+  #           alpha = .1, fill = "blue")
     #geom_segment(aes(x = mdy_hm(paste(baseline.start)),
     #                xend = baseline.end,
     #                 y = baseline,
